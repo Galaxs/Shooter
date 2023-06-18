@@ -83,22 +83,49 @@ Sprite& Zombie::getSprite()
 
 void Zombie::update(float elapsedTime, Vector2f playerPosition)
 {
-    //  Move the zombie if the player is futher away from it/him
-    if (playerPosition.x > m_Position.x)
+    // calculate the gradient of path
+    float gradient = (m_Position.x - playerPosition.x) / (m_Position.y - playerPosition.y);
+
+    // any gradient less than 0 needs to be negative
+    if (gradient < 0)
     {
-        m_Position.x += m_Speed * elapsedTime;
+        gradient *= -1;
     }
-    if (playerPosition.y > m_Position.y)
-    {
-        m_Position.y += m_Speed * elapsedTime;
-    }
+    
+
+    // calculate the ratio between X and Y
+    float ratioXY = m_Speed / (gradient + 1);
+
+    // set the speed horizontaly and vertically
+    m_DistanceY = ratioXY ;
+    m_DistanceX = ratioXY * gradient;
+
+    // points the thing in the right direction
     if (playerPosition.x < m_Position.x)
     {
-        m_Position.x -= m_Speed * elapsedTime;
+        m_DistanceX *= -1;
     }
     if (playerPosition.y < m_Position.y)
     {
-        m_Position.y -= m_Speed * elapsedTime;
+        m_DistanceY *= -1;
+    }
+   
+    //  Move the zombie if the player is futher away from it/him
+    if (playerPosition.x > m_Position.x)
+    {
+        m_Position.x += m_DistanceX * elapsedTime;
+    }
+    if (playerPosition.x < m_Position.x)
+    {
+        m_Position.x += m_DistanceX * elapsedTime;
+    }
+    if (playerPosition.y > m_Position.y)
+    {
+        m_Position.y += m_DistanceY * elapsedTime;
+    }
+    if (playerPosition.y < m_Position.y)
+    {
+        m_Position.y += m_DistanceY * elapsedTime;
     }
 
     // Move the sprite

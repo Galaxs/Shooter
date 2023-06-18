@@ -21,6 +21,9 @@ class Zombie
     const int MAX_VARRIANCE = 30;
     const int OFFSET = 101 - MAX_VARRIANCE;
 
+    // Variables for gradient / XY ratio
+    float m_DistanceY, m_DistanceX;
+
     // Position of the enemy
     Vector2f m_Position;
 

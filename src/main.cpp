@@ -63,6 +63,12 @@ int main()
     float fireRate = 3;
     Time lastFired;             // when was the last bullet fired
 
+    // Set the cross-hair and hides the mouse
+    window.setMouseCursorVisible(false);
+    Sprite mouseCrossHair = Sprite(TextureHolder::getTexture("graphics/crosshair001.png"));
+    mouseCrossHair.setOrigin((mouseCrossHair.getLocalBounds().left + mouseCrossHair.getLocalBounds().width) / 2, (mouseCrossHair.getLocalBounds().top + mouseCrossHair.getLocalBounds().height) / 2);
+
+
     // GAME LOOP
     while (window.isOpen())
     {
@@ -173,8 +179,6 @@ int main()
                 {
                     // Pass the centre of the player and the center of the cross-hair
                     // to the shoot funciton
-                    std::cout << "current bullet: " << currentBullet << std::endl;
-                    std::cout << "bullets in clip " << bulletsInClip << endl;
                     bullets[currentBullet].shoot(player.getCenter().x, player.getCenter().y, mouseWorldCoords.x, mouseWorldCoords.y);
                     currentBullet++;   
                     if (currentBullet > 99)
@@ -247,6 +251,10 @@ int main()
             float dtAsSeconds = dt.asSeconds();                                         // a fraction of 1 from the delta time
             mouseScreenCoords = Mouse::getPosition();                                   // where is the mouse pointer
             mouseWorldCoords = window.mapPixelToCoords(Mouse::getPosition(), mainView); //  convert mouse position to world coordinates of mainview
+
+            //  Update the cross-hair
+            mouseCrossHair.setPosition(mouseWorldCoords);
+            
             player.update(dtAsSeconds, Mouse::getPosition());                           // update the player
             Vector2f playerPosition = player.getCenter();                               //  Make a note of the player's new position
             mainView.setCenter(player.getCenter());
@@ -270,6 +278,7 @@ int main()
             }
         }
 
+        
         
 
 
@@ -296,6 +305,7 @@ int main()
             
             
             window.draw(player.getSprite()); //  draw the player
+            window.draw(mouseCrossHair);        
         }
 
         if (state == State::LEVELING_UP)
