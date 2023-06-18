@@ -33,6 +33,7 @@ compile:
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -c $(SRC)/Zombie.cpp -o $(BIN)/Zombie.o
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -c $(SRC)/TextureHolder.cpp -o $(BIN)/TextureHolder.o
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -c $(SRC)/CreateHorde.cpp -o $(BIN)/CreateHorde.o
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -c $(SRC)/Bullet.cpp -o $(BIN)/Bullet.o
 
 
 

@@ -15,7 +15,8 @@ Player::Player() : m_Speed (START_SPEED), m_Healt (START_HEALTH), m_MaxHealt (ST
     // m_Texture = 
     m_Sprite = Sprite(TextureHolder::getTexture("graphics/hitman1_gun.png"));
 
-    m_Sprite.setOrigin(24,21);          // could be done in another way TODO
+    m_Sprite.setOrigin((m_Sprite.getLocalBounds().left + m_Sprite.getLocalBounds().width) / 2,
+                        (m_Sprite.getLocalBounds().top + m_Sprite.getLocalBounds().height) / 2);          
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, short tileSize)

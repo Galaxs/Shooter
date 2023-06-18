@@ -2,6 +2,7 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include "Player.h"
+#include "Bullet.h"
 #include "Arena.h"
 #include "TextureHolder.h"
 
@@ -53,6 +54,15 @@ int main()
     int zombiesAlive;
     Zombie* zombies = nullptr;
 
+    // 100 bullet spool
+    Bullet bullets[100];
+    int currentBullet = 0;
+    int bulletsRemaining = 24;
+    int bulletsInClip = 6;
+    int clipSize = 6;
+    float fireRate = 3;
+    Time lastFired;             // when was the last bullet fired
+
     // GAME LOOP
     while (window.isOpen())
     {
@@ -83,6 +93,32 @@ int main()
                 else if (event.key.code == Keyboard::Return && state == State::GAME_OVER)
                 {
                     state = State::LEVELING_UP;
+                }
+
+                // RELOAD GUN
+                if (event.key.code == Keyboard::R)
+                {
+                    if (bulletsRemaining >= clipSize)           
+                    {
+                        // TODO - MAKE IT SO DONT WASTE ANY BULLET, perhaps by allowin the reload
+                        // ven if have 2 bullets in the inventory 
+                        // also fill the clip with the bullet in the inventory so dont waste any bullet by reloading while 
+                        //still have some bullets in the clip
+                        // Player have plenty bullets in the inventory - allow reload
+                        bulletsInClip = clipSize;
+                        bulletsRemaining -= clipSize;
+                    }
+                    else if (bulletsRemaining > 0)
+                    {
+                        // few bullets left
+                        bulletsInClip = bulletsRemaining;
+                        bulletsRemaining = 0;
+                    }
+                    // else
+                    // {
+                    //     // 2DO
+                    // }
+                    
                 }
 
               
@@ -128,7 +164,31 @@ int main()
             {
                 player.stopMovingRight();
             }
+
+            // SHOOT A BULLET
+            if (Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+
+                if (timeTotal.asMilliseconds() - lastFired.asMilliseconds() > 1000 / fireRate && bulletsInClip > 0)
+                {
+                    // Pass the centre of the player and the center of the cross-hair
+                    // to the shoot funciton
+                    std::cout << "current bullet: " << currentBullet << std::endl;
+                    std::cout << "bullets in clip " << bulletsInClip << endl;
+                    bullets[currentBullet].shoot(player.getCenter().x, player.getCenter().y, mouseWorldCoords.x, mouseWorldCoords.y);
+                    currentBullet++;   
+                    if (currentBullet > 99)
+                    {
+                        currentBullet = 0;
+                    }   
+                    lastFired = timeTotal;
+                    
+                    bulletsInClip--;
+                }
+            }
         } // end of wasd while plying
+
+
         //  Handle the LEVELING UP state
         if (state == State::LEVELING_UP)
         {
@@ -198,7 +258,20 @@ int main()
                     zombies[i].update(dtAsSeconds, playerPosition);
                 }
             }
+            
+            // UPDATE THE BULLETS in flisht
+            for (int i = 0; i < 100; i++)
+            {
+                if (bullets[i].isInFlight())
+                {
+                    bullets[i].update(dtAsSeconds);
+                }
+                
+            }
         }
+
+        
+
 
         //  DRAW PART OF THE FRAME
         if (state == State::PLAYING)
@@ -211,6 +284,16 @@ int main()
             {
                 window.draw(zombies[i].getSprite());
             }
+            
+            //  DRAW THE BULLETS
+            for (int i = 0; i < 100; i++)
+            {
+                if (bullets[i].isInFlight())
+                {
+                    window.draw(bullets[i].getShape());
+                }
+            }
+            
             
             window.draw(player.getSprite()); //  draw the player
         }
