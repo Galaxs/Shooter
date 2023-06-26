@@ -126,6 +126,7 @@ void Player::stopMovingRight()
 
 void Player::update(float elapsedTime, Vector2i mouseCoords)
 {
+    
     if (m_UpPressed)
     {
         m_Position.y -= m_Speed * elapsedTime;

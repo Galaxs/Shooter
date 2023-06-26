@@ -8,6 +8,7 @@ using namespace sf;
 class Player
 {
 private:
+    
     const float START_SPEED = 200.f;
     const float START_HEALTH = 300.f;
     Vector2f m_Position;        //  where is the player
@@ -15,6 +16,7 @@ private:
     Texture m_Texture;
     Vector2f m_ScreenRes;
     IntRect m_ArenaSize;
+    float m_DistanceX, m_DistanceY;
     short m_TileSize;
     bool m_UpPressed;
     bool m_DownPressed;

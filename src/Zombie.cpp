@@ -59,6 +59,10 @@ bool Zombie::hit()
     {
         // dead
         m_Sprite = Sprite(TextureHolder::getTexture("graphics/splash.png"));
+        m_Sprite.setScale(.5f, .5f);
+        m_Sprite.setOrigin(m_Sprite.getLocalBounds().width / 2, m_Sprite.getLocalBounds().height / 2);              
+
+        m_Sprite.setPosition(m_Position);
         m_IsAlive = false;
         return true;
     }
