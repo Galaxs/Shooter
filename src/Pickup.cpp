@@ -39,9 +39,9 @@ void Pickup::setArena(IntRect arena)
 void Pickup::spawn()
 {
     // random width and height of the arena to spawn
-    srand((int)time(0) / m_Type);
+    srand((int)time(0) / m_Type * m_SecondsSinceSpawned);
     int x = (rand() % m_Arena.width);
-    srand((int)time(0) * m_Type);
+    srand((int)time(0) * m_Type / m_SecondsSinceSpawned);
     int y = (rand() % m_Arena.height);
 
     m_SecondsSinceSpawned = 0;
@@ -112,4 +112,19 @@ void Pickup::upgrade()
     m_SecondsToLive += (SECONDS_TO_LIVE_START_VALUE / 10.0f);
     m_SecondsToWait -= (WAIT_START_VALUE / 10.0f);
     
+}
+
+void Pickup::resetStats()
+{
+    if (m_Type == 1)
+    {
+        m_Value = HEALTH_START_VALUE;
+    }
+    else if (m_Type == 2)
+    {
+        m_Value = AMMO_START_VALUE;
+    }
+    
+    m_SecondsToLive = SECONDS_TO_LIVE_START_VALUE;
+    m_SecondsToWait = WAIT_START_VALUE;
 }

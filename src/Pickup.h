@@ -48,4 +48,6 @@ public:
     // Upgrade the pickup
     void upgrade();
 
+    void resetStats();
+
 };
